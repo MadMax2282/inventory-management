@@ -24,7 +24,7 @@ class StockSubject:
             self._observers.remove(observer)
 
     def notify(self, event_type, product, payload=None):
-        for observer in list(self._observers):
+        for observer in self._observers[:]:
             observer.on_event(event_type, product, payload or {})
 
     @property
