@@ -1,0 +1,79 @@
+classDiagram
+    class IRepository {
+        <<interface>>
+        add()
+        get()
+        get_all()
+        update()
+        delete()
+    }
+    class InMemoryRepository {
+        _items
+        find()
+    }
+    class ProductRepository {
+        get_by_sku()
+        get_active()
+        get_below_min()
+    }
+
+    IRepository <|.. InMemoryRepository
+    InMemoryRepository <|-- ProductRepository
+
+    class InventoryService {
+        receive_stock()
+        ship_stock()
+        reserve_stock()
+        adjust_stock()
+        subject
+    }
+    class SalesService {
+        create_sale()
+        complete_sale()
+    }
+    class ReservationService {
+        create_reservation()
+        allocate_pending()
+    }
+    class ReorderService {
+        build_reorder_plan()
+    }
+    class WriteOffService {
+        write_off()
+    }
+    class SupplyService {
+        receive_supply()
+    }
+
+    InventoryService --> ProductRepository
+    SalesService --> InventoryService
+    ReservationService --> InventoryService
+    ReorderService --> InventoryService
+    WriteOffService --> InventoryService
+    SupplyService --> InventoryService
+
+    class ReorderStrategy {
+        <<interface>>
+        calculate()
+    }
+    class DiscountStrategy {
+        <<interface>>
+        apply()
+    }
+    class StockObserver {
+        <<interface>>
+        on_event()
+    }
+    class StockSubject {
+        attach()
+        notify()
+    }
+    class MovementFactory {
+        create()
+    }
+
+    ReorderService --> ReorderStrategy
+    SalesService --> DiscountStrategy
+    InventoryService --> StockSubject
+    StockSubject --> StockObserver
+    InventoryService --> MovementFactory
