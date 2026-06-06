@@ -1,0 +1,53 @@
+classDiagram
+    class Product {
+        sku
+        name
+        unit_price
+        quantity_on_hand
+        reserved_quantity
+    }
+    class Supplier {
+        name
+        lead_time_days
+        rating
+    }
+    class Supply {
+        status
+    }
+    class SupplyItem {
+        quantity
+        unit_cost
+    }
+    class Sale {
+        status
+        discount
+    }
+    class SaleItem {
+        quantity
+        unit_price
+    }
+    class Reservation {
+        quantity
+        status
+        tier
+    }
+    class WriteOff {
+        quantity
+        reason
+        loss_amount
+    }
+    class User {
+        name
+        role
+        tier
+    }
+
+    Supplier "1" --> "*" Supply : постачає
+    Supply "1" *-- "*" SupplyItem : містить
+    SupplyItem "*" --> "1" Product : стосується
+    Sale "1" *-- "*" SaleItem : містить
+    SaleItem "*" --> "1" Product : стосується
+    Reservation "*" --> "1" Product : резервує
+    WriteOff "*" --> "1" Product : списує
+    User "1" --> "*" Sale : оформлює
+    User "1" --> "*" Reservation : створює
